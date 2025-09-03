@@ -121,8 +121,8 @@ function genSlide01(pptx) {
 		fill: {
 			type: "linearGradient",
 			stops: [
-				{ position: 0, color: '000000', transparency: 10 },
-				{ position: 100, color: '333333', transparency: 50 },
+				{ position: 0, color: "000000", transparency: 10 },
+				{ position: 100, color: "333333", transparency: 50 },
 			],
 			angle: 45,
 			scaled: 1,
@@ -295,11 +295,40 @@ function genSlide02(pptx) {
 		fill: {
 			type: "linearGradient",
 			stops: [
-				{ position: 0, color: '000000', transparency: 10 },
-				{ position: 100, color: '333333', transparency: 50 },
+				{ position: 0, color: "000000", transparency: 10 },
+				{ position: 100, color: "333333", transparency: 50 },
 			],
 			angle: 45,
 			scaled: 1,
 		},
+	});
+
+	// 添加径向渐变示例
+	slide.addShape(pptx.shapes.OVAL, {
+		x: 1.5,
+		y: 4.5,
+		w: 2,
+		h: 1.5,
+		fill: {
+			type: "radiusGradient",
+			stops: [
+				{ position: 0, color: "FF0000" }, // 中心红色
+				{ position: 50, color: "FFFF00" }, // 中间黄色
+				{ position: 100, color: "00FF00" }, // 边缘绿色
+			],
+			centerX: 30, // 中心点偏左
+			centerY: 40, // 中心点偏上
+			radius: 80, // 渐变半径
+		},
+		line: { color: "000000", width: 1 },
+	});
+
+	slide.addText("径向渐变示例", {
+		x: 1.5,
+		y: 6.2,
+		w: 2,
+		h: 0.3,
+		align: "center",
+		fontSize: 12,
 	});
 }

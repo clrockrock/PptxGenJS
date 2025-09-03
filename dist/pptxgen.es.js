@@ -1,4 +1,4 @@
-/* PptxGenJS 4.0.1 @ 2025-09-03T03:40:25.022Z */
+/* PptxGenJS 4.0.1-gradient @ 2025-09-03T10:05:50.963Z */
 import JSZip from 'jszip';
 
 /******************************************************************************
@@ -784,7 +784,7 @@ function createGlowElement(options, defaults) {
  * @returns XML string
  */
 function genXmlColorSelection(props) {
-    var _a, _b, _c, _d, _e, _f, _g;
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o;
     if (!props) {
         return '';
     }
@@ -795,7 +795,7 @@ function genXmlColorSelection(props) {
         safeProps.color = props;
     }
     else {
-        safeProps = props;
+        safeProps = Object.assign({}, props);
         safeProps.type = (_a = props.type) !== null && _a !== void 0 ? _a : 'solid';
     }
     switch (safeProps.type) {
@@ -839,6 +839,30 @@ function genXmlColorSelection(props) {
                 outText += `<a:tileRect ${tAttr} ${rAttr} ${bAttr} ${lAttr}/>`;
             }
             outText += '</a:gradFill>';
+            break;
+        }
+        case 'radialGradient': {
+            // 径向渐变 - 支持自定义中心点和半径
+            const stops = (_h = safeProps.stops) !== null && _h !== void 0 ? _h : [];
+            const rotWithShape = (_j = safeProps.rotWithShape) !== null && _j !== void 0 ? _j : true;
+            const flip = (_k = safeProps.flip) !== null && _k !== void 0 ? _k : 'none';
+            (_l = safeProps.centerX) !== null && _l !== void 0 ? _l : 50;
+            (_m = safeProps.centerY) !== null && _m !== void 0 ? _m : 50;
+            (_o = safeProps.radius) !== null && _o !== void 0 ? _o : 50;
+            outText += `<a:gradFill rotWithShape="${rotWithShape ? 1 : 0}" flip="${flip}">`;
+            if (stops.length > 0) {
+                outText += '<a:gsLst>';
+                outText += stops.map(({ position, color: stopColor, transparency }) => {
+                    const stopInternalElements = transparency
+                        ? `<a:alpha val="${Math.round((100 - transparency) * 1000)}"/>`
+                        : '';
+                    return `<a:gs pos="${position * 1000}">${createColorElement(stopColor, stopInternalElements)}</a:gs>`;
+                }).join('');
+                outText += '</a:gsLst>';
+            }
+            outText += `<a:path path="circle"><a:fillToRect l="50000" t="50000" r="50000" b="50000"/></a:path>`;
+            outText += '</a:gradFill>';
+            console.log(outText);
             break;
         }
         default: // @note need a statement as having only "break" is removed by rollup, then tiggers "no-default" js-linter
@@ -5549,7 +5573,7 @@ function slideObjectToXml(slide) {
                     strSlideXml += ` <a:${slideItemObj.options.shadow.type}Shdw ${slideItemObj.options.shadow.type === 'outer' ? 'sx="100000" sy="100000" kx="0" ky="0" algn="bl" rotWithShape="0"' : ''} blurRad="${slideItemObj.options.shadow.blur}" dist="${slideItemObj.options.shadow.offset}" dir="${slideItemObj.options.shadow.angle}">`;
                     strSlideXml += ` <a:srgbClr val="${slideItemObj.options.shadow.color}">`;
                     strSlideXml += ` <a:alpha val="${slideItemObj.options.shadow.opacity}"/></a:srgbClr>`;
-                    strSlideXml += ' </a:outerShdw>';
+                    strSlideXml += ` </a:${slideItemObj.options.shadow.type}Shdw>`;
                     strSlideXml += '</a:effectLst>';
                 }
                 /* TODO: FUTURE: Text wrapping (copied from MS-PPTX export)

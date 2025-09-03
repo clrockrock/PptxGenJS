@@ -1027,6 +1027,128 @@ declare namespace PptxGenJS {
 		 */
 		alpha?: number
 	}
+
+	/**
+	 * Gradient stop properties
+	 */
+	export interface GradientStop {
+		/**
+		 * Position (percent)
+		 * - range: 0-100
+		 */
+		position: number
+		/**
+		 * Gradient stop color
+		 * - `HexColor` or `ThemeColor`
+		 * @example 'FF0000' // hex color (red)
+		 * @example pptx.SchemeColor.text1 // Theme color (Text1)
+		 */
+		color: Color
+		/**
+		 * Transparency (percent)
+		 * - range: 0-100
+		 * @default 0
+		 */
+		transparency?: number
+	}
+
+	/**
+	 * Base gradient properties for shapes
+	 */
+	interface BaseGradientShapeFillProps {
+		/**
+		 * Gradient stops
+		 */
+		stops: GradientStop[]
+		/**
+		 * Rotate with shape
+		 * @default true
+		 */
+		rotWithShape?: boolean
+		/**
+		 * Flip direction
+		 * @default 'none'
+		 */
+		flip?: 'none' | 'x' | 'y' | 'xy'
+	}
+
+	/**
+	 * Linear gradient properties for shapes
+	 */
+	export interface LinearGradientShapeFillProps extends BaseGradientShapeFillProps {
+		/**
+		 * Gradient type
+		 */
+		type: 'linearGradient'
+		/**
+		 * Gradient angle (degrees)
+		 * - range: 0-360
+		 * @default 0
+		 */
+		angle?: number
+	}
+
+	/**
+	 * Radial gradient properties for shapes
+	 */
+	export interface RadialGradientShapeFillProps extends BaseGradientShapeFillProps {
+		/**
+		 * Gradient type
+		 */
+		type: 'radialGradient'
+		/**
+		 * Radial gradient center X position (percent)
+		 * - range: 0-100
+		 * - 0 = left edge, 50 = center, 100 = right edge
+		 * @default 50
+		 */
+		centerX?: number
+		/**
+		 * Radial gradient center Y position (percent)
+		 * - range: 0-100
+		 * - 0 = top edge, 50 = center, 100 = bottom edge
+		 * @default 50
+		 */
+		centerY?: number
+		/**
+		 * Radial gradient radius (percent)
+		 * - range: 0-100
+		 * - 0 = no gradient, 100 = full shape coverage
+		 * @default 50
+		 */
+		radius?: number
+	}
+
+	/**
+	 * Solid fill properties for shapes
+	 */
+	export interface SolidShapeFillProps {
+		/**
+		 * Fill color
+		 * - `HexColor` or `ThemeColor`
+		 * @example 'FF0000' // hex color (red)
+		 * @example pptx.SchemeColor.text1 // Theme color (Text1)
+		 */
+		color?: Color
+		/**
+		 * Transparency (percent)
+		 * - MS-PPT > Format Shape > Fill & Line > Fill > Transparency
+		 * - range: 0-100
+		 * @default 0
+		 */
+		transparency?: number
+		/**
+		 * Fill type
+		 * @default 'solid'
+		 */
+		type?: 'none' | 'solid'
+
+		/**
+		 * Transparency (percent)
+		 * @deprecated v3.3.0 - use `transparency`
+		 */
+		alpha?: number
+	}
 	export interface ShapeLineProps extends ShapeFillProps {
 		/**
 		 * Line width (pt)
@@ -1464,7 +1586,7 @@ declare namespace PptxGenJS {
 		 * @example { color:'0088CC', transparency:50 } // hex color, 50% transparent
 		 * @example { color:pptx.SchemeColor.accent1 } // Theme color Accent1
 		 */
-		fill?: ShapeFillProps
+		fill?: ShapeFillProps | RadialGradientShapeFillProps | LinearGradientShapeFillProps
 		/**
 		 * Flip shape horizontally?
 		 * @default false
@@ -1660,8 +1782,10 @@ declare namespace PptxGenJS {
 		 * @example { color:'FF0000' } // hex color (red)
 		 * @example { color:'0088CC', transparency:50 } // hex color, 50% transparent
 		 * @example { color:pptx.SchemeColor.accent1 } // theme color Accent1
+		 * @example { type:'linearGradient', stops:[...] } // linear gradient
+		 * @example { type:'radiusGradient', stops:[...] } // radial gradient
 		 */
-		fill?: ShapeFillProps
+		fill?: LinearGradientShapeFillProps | RadialGradientShapeFillProps | SolidShapeFillProps
 		hyperlink?: HyperlinkProps
 		/**
 		 * Cell margin (inches)
@@ -1738,8 +1862,10 @@ declare namespace PptxGenJS {
 		 * @example { color:'FF0000' } // hex color (red)
 		 * @example { color:'0088CC', transparency:50 } // hex color, 50% transparent
 		 * @example { color:pptx.SchemeColor.accent1 } // theme color Accent1
+		 * @example { type:'linearGradient', stops:[...] } // linear gradient
+		 * @example { type:'radiusGradient', stops:[...] } // radial gradient
 		 */
-		fill?: ShapeFillProps
+		fill?: LinearGradientShapeFillProps | RadialGradientShapeFillProps | SolidShapeFillProps
 		/**
 		 * Cell margin (inches)
 		 * - affects all table cells, is superceded by cell options
@@ -1819,8 +1945,10 @@ declare namespace PptxGenJS {
 		 * @example { color:'FF0000' } // hex color (red)
 		 * @example { color:'0088CC', transparency:50 } // hex color, 50% transparent
 		 * @example { color:pptx.SchemeColor.accent1 } // theme color Accent1
+		 * @example { type:'linearGradient', stops:[...] } // linear gradient
+		 * @example { type:'radiusGradient', stops:[...] } // radial gradient
 		 */
-		fill?: ShapeFillProps
+		fill?: LinearGradientShapeFillProps | RadialGradientShapeFillProps | SolidShapeFillProps
 		/**
 		 * Flip shape horizontally?
 		 * @default false

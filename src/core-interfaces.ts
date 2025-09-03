@@ -232,6 +232,32 @@ export interface LinearGradientShapeFillProps extends BaseGradientShapeFillProps
 	 */
 	type: 'linearGradient'
 }
+
+// radius gradient
+export interface RadialGradientShapeFillProps extends BaseGradientShapeFillProps {
+	type: 'radialGradient'
+	/**
+	 * Radial gradient center X position (percent)
+	 * - range: 0-100
+	 * - 0 = left edge, 50 = center, 100 = right edge
+	 * @default 50
+	 */
+	centerX?: number
+	/**
+	 * Radial gradient center Y position (percent)
+	 * - range: 0-100
+	 * - 0 = top edge, 50 = center, 100 = bottom edge
+	 * @default 50
+	 */
+	centerY?: number
+	/**
+	 * Radial gradient radius (percent)
+	 * - range: 0-100
+	 * - 0 = no gradient, 100 = full shape coverage
+	 * @default 50
+	 */
+	radius?: number
+}
 export interface SolidShapeFillProps {
 	/**
 	 * Fill color
@@ -696,7 +722,7 @@ export interface ShapeProps extends PositionProps, ObjectNameProps {
 	 * @example { color:'0088CC', transparency:50 } // hex color, 50% transparent
 	 * @example { color:pptx.SchemeColor.accent1 } // Theme color Accent1
 	 */
-	fill?: LinearGradientShapeFillProps | SolidShapeFillProps
+	fill?: LinearGradientShapeFillProps | RadialGradientShapeFillProps | SolidShapeFillProps
 	/**
 	 * Flip shape horizontally?
 	 * @default false
@@ -893,7 +919,7 @@ export interface TableCellProps extends TextBaseProps {
 	 * @example { color:'0088CC', transparency:50 } // hex color, 50% transparent
 	 * @example { color:pptx.SchemeColor.accent1 } // theme color Accent1
 	 */
-	fill?: LinearGradientShapeFillProps | SolidShapeFillProps
+	fill?: LinearGradientShapeFillProps | SolidShapeFillProps | RadialGradientShapeFillProps
 	hyperlink?: HyperlinkProps
 	/**
 	 * Cell margin (inches)
@@ -1077,8 +1103,10 @@ export interface TextPropsOptions extends PositionProps, DataOrPathProps, TextBa
 	 * @example { color:'FF0000' } // hex color (red)
 	 * @example { color:'0088CC', transparency:50 } // hex color, 50% transparent
 	 * @example { color:pptx.SchemeColor.accent1 } // theme color Accent1
+	 * @example { type:'linearGradient', stops:[...] } // linear gradient
+	 * @example { type:'radiusGradient', stops:[...] } // radial gradient
 	 */
-	fill?: LinearGradientShapeFillProps | SolidShapeFillProps
+	fill?: LinearGradientShapeFillProps | RadialGradientShapeFillProps | SolidShapeFillProps
 	/**
 	 * Flip shape horizontally?
 	 * @default false

@@ -1,6 +1,6 @@
 {
-	"name": "pptxgenjs",
-	"version": "4.0.1",
+	"name": "@clrockrock/pptxgenjs",
+	"version": "4.0.1-gradient",
 	"author": {
 		"name": "Brent Ely",
 		"url": "https://github.com/gitbrent/"

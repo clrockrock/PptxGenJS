@@ -17,7 +17,7 @@ import {
 	DEMO_TITLE_TEXTBK,
 	LOREM_IPSUM,
 	TABLE_NAMES_F,
-	TESTMODE
+	TESTMODE,
 } from "./enums.mjs";
 import { TABLE_AUTO_PAGE_TEST } from "./enums_tables.mjs";
 
@@ -435,10 +435,10 @@ function genSlide05(pptx) {
 	);
 	slide.addText(
 		"[\n" +
-		"  { text:'1st line', options:{ fontSize:24, color:'99ABCC', align:'right',  breakLine:true } },\n" +
-		"  { text:'2nd line', options:{ fontSize:36, color:'FFFF00', align:'center', breakLine:true } },\n" +
-		"  { text:'3rd line', options:{ fontSize:48, color:'0088CC', align:'left'    } }\n" +
-		"]",
+			"  { text:'1st line', options:{ fontSize:24, color:'99ABCC', align:'right',  breakLine:true } },\n" +
+			"  { text:'2nd line', options:{ fontSize:36, color:'FFFF00', align:'center', breakLine:true } },\n" +
+			"  { text:'3rd line', options:{ fontSize:48, color:'0088CC', align:'left'    } }\n" +
+			"]",
 		{ x: 1, y: 1.1, w: 11, h: 1.25, margin: 0.1, fontFace: "Courier", fontSize: 13, fill: { color: "F1F1F1" }, color: "333333" }
 	);
 
@@ -1041,14 +1041,8 @@ function genSlide10(pptx) {
 				{ text: "id", options: { bold: true, fill: "1F3864", color: "ffffff" } },
 				{ text: "Content", options: { bold: true, fill: "ffaacc", color: "ffffff" } },
 			],
-			[
-				{ text: "1" },
-				{ text: TABLE_AUTO_PAGE_TEST.replace(/\n/g, '') },
-			],
-			[
-				{ text: "2" },
-				{ text: TABLE_AUTO_PAGE_TEST },
-			]
+			[{ text: "1" }, { text: TABLE_AUTO_PAGE_TEST.replace(/\n/g, "") }],
+			[{ text: "2" }, { text: TABLE_AUTO_PAGE_TEST }],
 		];
 
 		slide.addTable(projRows, {
@@ -1070,6 +1064,126 @@ function genSlide10(pptx) {
 			//verbose: true,
 		});
 	}
+
+	// 添加渐变填充的表格示例
+	slide.addText("渐变填充表格示例", {
+		x: 0.5,
+		y: 2.5,
+		w: 9,
+		h: 0.3,
+		fontSize: 16,
+		bold: true,
+	});
+
+	slide.addTable(
+		[
+			[
+				{
+					text: "产品",
+					options: {
+						fill: {
+							type: "linearGradient",
+							stops: [
+								{ position: 0, color: "FF0000" },
+								{ position: 100, color: "FFFF00" },
+							],
+							angle: 45,
+						},
+					},
+				},
+				{
+					text: "销量",
+					options: {
+						fill: {
+							type: "radialGradient",
+							stops: [
+								{ position: 0, color: "00FF00" },
+								{ position: 100, color: "0000FF" },
+							],
+							centerX: 30,
+							centerY: 40,
+							radius: 80,
+						},
+					},
+				},
+				{ text: "收入", options: { fill: { type: "solid", color: "FF00FF", transparency: 20 } } },
+			],
+			[
+				{
+					text: "A产品",
+					options: {
+						fill: {
+							type: "linearGradient",
+							stops: [
+								{ position: 0, color: "FF8800" },
+								{ position: 100, color: "FF0088" },
+							],
+							angle: 90,
+						},
+					},
+				},
+				{
+					text: "1000",
+					options: {
+						fill: {
+							type: "radiusGradient",
+							stops: [
+								{ position: 0, color: "FFFF00" },
+								{ position: 50, color: "00FFFF" },
+								{ position: 100, color: "FF00FF" },
+							],
+							centerX: 50,
+							centerY: 50,
+							radius: 60,
+						},
+					},
+				},
+				{ text: "$50,000", options: { fill: { type: "solid", color: "00FF88", transparency: 30 } } },
+			],
+			[
+				{
+					text: "B产品",
+					options: {
+						fill: {
+							type: "linearGradient",
+							stops: [
+								{ position: 0, color: "8800FF" },
+								{ position: 100, color: "FF8800" },
+							],
+							angle: 135,
+						},
+					},
+				},
+				{
+					text: "800",
+					options: {
+						fill: {
+							type: "radiusGradient",
+							stops: [
+								{ position: 0, color: "FF8800" },
+								{ position: 100, color: "8800FF" },
+							],
+							centerX: 70,
+							centerY: 30,
+							radius: 70,
+						},
+					},
+				},
+				{ text: "$40,000", options: { fill: { type: "solid", color: "88FF00", transparency: 25 } } },
+			],
+		],
+		{
+			x: 0.5,
+			y: 3,
+			w: 9,
+			h: 1.5,
+			colW: [3, 3, 3],
+			border: { type: "solid", color: "000000", pt: 1 },
+			align: "center",
+			fontSize: 12,
+			bold: true,
+		}
+	);
 }
 
 /**
@@ -1093,13 +1207,13 @@ function genSlide11(pptx) {
 			{ text: "white color", options: { fill: { color: "6699CC" }, align: "left", color: "FFFFFF" } },
 			{ text: "yellow color", options: { fill: { color: "99AACC" }, color: "FFFFAA" } },
 			{ text: "hyperlink here", options: { fill: { color: "AACCFF" }, hyperlink: { slide: 1 } } },
-		]
+		],
 	];
 
 	const arrTabRows = [];
 	for (let i = 0; i < 36; i++) {
 		arrTabRows.push(...baseTabRows);
-	};
+	}
 
-	slide.addTable(arrTabRows, { x: 0.5, y: 1.0, w:10, autoPage: true });
+	slide.addTable(arrTabRows, { x: 0.5, y: 1.0, w: 10, autoPage: true });
 }

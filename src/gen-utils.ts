@@ -3,7 +3,7 @@
  */
 
 import { EMU, REGEX_HEX_COLOR, DEF_FONT_COLOR, ONEPT, SchemeColor, SCHEME_COLORS } from './core-enums'
-import { PresLayout, TextGlowProps, PresSlide, SolidShapeFillProps, Color, ShapeLineProps, Coord, ShadowProps, LinearGradientShapeFillProps } from './core-interfaces'
+import { PresLayout, TextGlowProps, PresSlide, SolidShapeFillProps, Color, ShapeLineProps, Coord, ShadowProps, LinearGradientShapeFillProps, RadialGradientShapeFillProps } from './core-interfaces'
 
 /**
  * Translates any type of `x`/`y`/`w`/`h` prop to EMU
@@ -185,19 +185,19 @@ export function createGlowElement (options: TextGlowProps, defaults: TextGlowPro
  * @param {Color | ShapeFillProps | ShapeLineProps} props fill props
  * @returns XML string
  */
-export function genXmlColorSelection (props: Color | SolidShapeFillProps | ShapeLineProps | LinearGradientShapeFillProps): string {
+export function genXmlColorSelection (props: Color | SolidShapeFillProps | ShapeLineProps | LinearGradientShapeFillProps | RadialGradientShapeFillProps): string {
 	if (!props) {
 		return ''
 	}
 
 	let outText = ''
 
-	let safeProps: SolidShapeFillProps | ShapeLineProps | LinearGradientShapeFillProps = {}
+	let safeProps: SolidShapeFillProps | ShapeLineProps | LinearGradientShapeFillProps | RadialGradientShapeFillProps = {}
 	if (typeof props === 'string') {
 		safeProps.type = 'solid'
 		safeProps.color = props
 	} else {
-		safeProps = props
+		safeProps = { ...props }
 		safeProps.type = props.type ?? 'solid'
 	}
 
@@ -258,6 +258,57 @@ export function genXmlColorSelection (props: Color | SolidShapeFillProps | Shape
 			}
 
 			outText += '</a:gradFill>'
+			break
+		}
+			
+		case 'radialGradient': {
+			// 径向渐变 - 支持自定义中心点和半径
+			const stops = safeProps.stops ?? []
+			const rotWithShape = safeProps.rotWithShape ?? true
+			const flip = safeProps.flip ?? 'none'
+			let centerX = safeProps.centerX ?? 50
+			let centerY = safeProps.centerY ?? 50
+			let radius = safeProps.radius ?? 50
+
+			// 兼容 0-1 输入：若传入小数（<=1），按百分比处理（乘以100）
+			if (centerX <= 1) centerX = centerX * 100
+			if (centerY <= 1) centerY = centerY * 100
+			if (radius <= 1) radius = radius * 100
+
+			outText += `<a:gradFill rotWithShape="${rotWithShape ? 1 : 0}" flip="${flip}">`
+
+			if (stops.length > 0) {
+				outText += '<a:gsLst>'
+
+				outText += stops.map(
+					({ position, color: stopColor, transparency }) => {
+						const stopInternalElements = transparency
+							? `<a:alpha val="${Math.round((100 - transparency) * 1000)}"/>`
+							: ''
+
+						return `<a:gs pos="${position * 1000}">${createColorElement(stopColor, stopInternalElements)}</a:gs>`
+					}
+				).join('')
+
+				outText += '</a:gsLst>'
+			}
+
+			// 添加径向渐变（使用 path=circle，以兼容 WPS）
+			// 将中心点与半径(百分比 0-100)映射为 fillToRect 的 l/t/r/b(0-100000)
+			const leftPct = Math.max(0, Math.min(100, centerX - radius))
+			const topPct = Math.max(0, Math.min(100, centerY - radius))
+			const rightPct = Math.max(0, Math.min(100, 100 - centerX - radius))
+			const bottomPct = Math.max(0, Math.min(100, 100 - centerY - radius))
+
+			const l = Math.round(leftPct * 1000)
+			const t = Math.round(topPct * 1000)
+			const r = Math.round(rightPct * 1000)
+			const b = Math.round(bottomPct * 1000)
+
+			outText += `<a:path path="circle"><a:fillToRect l="50000" t="50000" r="50000" b="50000"/></a:path>`
+
+			outText += '</a:gradFill>'
+			console.log(outText)
 			break
 		}
 
