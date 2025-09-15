@@ -894,12 +894,14 @@ declare namespace PptxGenJS {
 		 */
 		data?: string
 	}
-	export interface BackgroundProps extends DataOrPathProps, ShapeFillProps {
+	export interface BackgroundProps extends DataOrPathProps {
 		/**
 		 * Color (hex format)
 		 * @deprecated v3.6.0 - use `ShapeFillProps` instead
 		 */
-		fill?: HexColor
+		fill?: HexColor | GradientColor | SolidShapeFillProps
+
+		color?: HexColor | GradientColor | SolidShapeFillProps
 
 		/**
 		 * source URL
@@ -913,6 +915,7 @@ declare namespace PptxGenJS {
 	 */
 	export type HexColor = string
 	export type ThemeColor = 'tx1' | 'tx2' | 'bg1' | 'bg2' | 'accent1' | 'accent2' | 'accent3' | 'accent4' | 'accent5' | 'accent6'
+	export type GradientColor = LinearGradientShapeFillProps | RadialGradientShapeFillProps
 	export type Color = HexColor | ThemeColor
 	export type Margin = number | [number, number, number, number]
 	export type HAlign = 'left' | 'center' | 'right' | 'justify'

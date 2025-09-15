@@ -3,7 +3,7 @@
  */
 
 import { EMU, REGEX_HEX_COLOR, DEF_FONT_COLOR, ONEPT, SchemeColor, SCHEME_COLORS } from './core-enums'
-import { PresLayout, TextGlowProps, PresSlide, SolidShapeFillProps, Color, ShapeLineProps, Coord, ShadowProps, LinearGradientShapeFillProps, RadialGradientShapeFillProps } from './core-interfaces'
+import { PresLayout, TextGlowProps, PresSlide, SolidShapeFillProps, Color, ShapeLineProps, Coord, ShadowProps, GradientColor } from './core-interfaces'
 
 /**
  * Translates any type of `x`/`y`/`w`/`h` prop to EMU
@@ -182,17 +182,17 @@ export function createGlowElement (options: TextGlowProps, defaults: TextGlowPro
 
 /**
  * Create color selection
- * @param {Color | ShapeFillProps | ShapeLineProps} props fill props
+ * @param {Color | ShapeFillProps | ShapeLineProps | GradientColor} props fill props
  * @returns XML string
  */
-export function genXmlColorSelection (props: Color | SolidShapeFillProps | ShapeLineProps | LinearGradientShapeFillProps | RadialGradientShapeFillProps): string {
+export function genXmlColorSelection (props: Color | SolidShapeFillProps | ShapeLineProps | GradientColor): string {
 	if (!props) {
 		return ''
 	}
 
 	let outText = ''
 
-	let safeProps: SolidShapeFillProps | ShapeLineProps | LinearGradientShapeFillProps | RadialGradientShapeFillProps = {}
+	let safeProps: SolidShapeFillProps | ShapeLineProps | GradientColor = {}
 	if (typeof props === 'string') {
 		safeProps.type = 'solid'
 		safeProps.color = props
