@@ -1,4 +1,4 @@
-/* PptxGenJS 4.0.1-gradient @ 2025-09-03T10:05:50.959Z */
+/* PptxGenJS 4.0.2 @ 2025-09-15T02:27:22.949Z */
 'use strict';
 
 var JSZip = require('jszip');
@@ -782,7 +782,7 @@ function createGlowElement(options, defaults) {
 }
 /**
  * Create color selection
- * @param {Color | ShapeFillProps | ShapeLineProps} props fill props
+ * @param {Color | ShapeFillProps | ShapeLineProps | GradientColor} props fill props
  * @returns XML string
  */
 function genXmlColorSelection(props) {
@@ -5170,7 +5170,7 @@ function slideObjectToXml(slide) {
         strSlideXml += `<p:bg><p:bgPr><a:blipFill dpi="0" rotWithShape="1"><a:blip r:embed="rId${slide._bkgdImgRid}"><a:lum/></a:blip><a:srcRect/><a:stretch><a:fillRect/></a:stretch></a:blipFill><a:effectLst/></p:bgPr></p:bg>`;
     }
     else if ((_a = slide.background) === null || _a === void 0 ? void 0 : _a.color) {
-        strSlideXml += `<p:bg><p:bgPr>${genXmlColorSelection(slide.background)}</p:bgPr></p:bg>`;
+        strSlideXml += `<p:bg><p:bgPr>${genXmlColorSelection(slide.background.color)}</p:bgPr></p:bg>`;
     }
     else if (!slide.bkgd && slide._name && slide._name === DEF_PRES_LAYOUT_NAME) {
         // NOTE: Default [white] background is needed on slideMaster1.xml to avoid gray background in Keynote (and Finder previews)
@@ -6859,7 +6859,7 @@ function makeXmlViewProps() {
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-const VERSION = '4.0.1';
+const VERSION = '4.0.2';
 class PptxGenJS {
     set layout(value) {
         const newLayout = this.LAYOUTS[value];
