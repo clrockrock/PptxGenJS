@@ -310,11 +310,12 @@ function slideObjectToXml (slide: PresSlide | SlideLayout): string {
 
 						let fillColor =
 							cell._optImp?.fill?.color
-								? cell._optImp.fill.color
-								: cell._optImp?.fill && typeof cell._optImp.fill === 'string'
+								? cell._optImp.fill
+								: cell._optImp?.fill
 									? cell._optImp.fill
 									: ''
 						fillColor = fillColor || cellOpts.fill ? cellOpts.fill : ''
+						
 						const cellFill = fillColor ? genXmlColorSelection(fillColor) : ''
 
 						let cellMargin = cellOpts.margin === 0 || cellOpts.margin ? cellOpts.margin : DEF_CELL_MARGIN_IN
