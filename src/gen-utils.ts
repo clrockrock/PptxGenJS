@@ -185,18 +185,17 @@ export function createGlowElement (options: TextGlowProps, defaults: TextGlowPro
  * @param {Color | ShapeFillProps | ShapeLineProps | GradientColor} props fill props
  * @returns XML string
  */
-export function genXmlColorSelection (props: Color | SolidShapeFillProps | ShapeLineProps | GradientColor): string {
+export function genXmlColorSelection (props: Color | SolidShapeFillProps | ShapeLineProps['fill'] | GradientColor): string {
 	if (!props) {
 		return ''
 	}
 
 	let outText = ''
 
-	let safeProps: SolidShapeFillProps | ShapeLineProps | GradientColor = {}
+	let safeProps: SolidShapeFillProps | ShapeLineProps['fill'] | GradientColor
 	if (typeof props === 'string') {
-		safeProps.type = 'solid'
-		safeProps.color = props
-	} else {
+		safeProps = { type: 'solid', color: props }
+	} else  {
 		safeProps = { ...props }
 		safeProps.type = props.type ?? 'solid'
 	}

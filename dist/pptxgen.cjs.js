@@ -1,4 +1,4 @@
-/* PptxGenJS 4.0.3 @ 2025-09-18T01:47:00.221Z */
+/* PptxGenJS 4.0.3 @ 2025-09-18T07:01:09.959Z */
 'use strict';
 
 var JSZip = require('jszip');
@@ -791,10 +791,9 @@ function genXmlColorSelection(props) {
         return '';
     }
     let outText = '';
-    let safeProps = {};
+    let safeProps;
     if (typeof props === 'string') {
-        safeProps.type = 'solid';
-        safeProps.color = props;
+        safeProps = { type: 'solid', color: props };
     }
     else {
         safeProps = Object.assign({}, props);
@@ -2253,8 +2252,9 @@ function addNotesDefinition(target, notes) {
  * @param {ShapeProps} opts shape options
  */
 function addShapeDefinition(target, shapeName, opts) {
+    var _a;
     const options = typeof opts === 'object' ? opts : {};
-    options.line = options.line || { type: 'none' };
+    options.line = options.line || { fill: { type: 'none' } };
     const newObject = {
         _type: SLIDE_OBJECT_TYPES.text,
         shape: shapeName || SHAPE_TYPE.RECTANGLE,
@@ -2266,15 +2266,13 @@ function addShapeDefinition(target, shapeName, opts) {
         throw new Error('Missing/Invalid shape parameter! Example: `addShape(pptxgen.shapes.LINE, {x:1, y:1, w:1, h:1});`');
     // 1: ShapeLineProps defaults
     const newLineOpts = {
-        type: options.line.type || 'solid',
-        color: options.line.color || DEF_SHAPE_LINE_COLOR,
-        transparency: options.line.transparency || 0,
         width: options.line.width || 1,
         dashType: options.line.dashType || 'solid',
         beginArrowType: options.line.beginArrowType || null,
         endArrowType: options.line.endArrowType || null,
+        fill: options.line.fill || { type: 'solid', color: DEF_SHAPE_LINE_COLOR, transparency: 0 },
     };
-    if (typeof options.line === 'object' && options.line.type !== 'none')
+    if (typeof options.line === 'object' && ((_a = options.line.fill) === null || _a === void 0 ? void 0 : _a.type) !== 'none')
         options.line = newLineOpts;
     // 2: Set options defaults
     options.x = options.x || (options.x === 0 ? 0 : 1);
@@ -2287,7 +2285,7 @@ function addShapeDefinition(target, shapeName, opts) {
     // 3: Handle line (lots of deprecated opts)
     if (typeof options.line === 'string') {
         const tmpOpts = newLineOpts;
-        tmpOpts.color = String(options.line); // @deprecated `options.line` string (was line color)
+        tmpOpts.fill = { type: 'solid', color: String(options.line) }; // @deprecated `options.line` string (was line color)
         options.line = tmpOpts;
     }
     if (typeof options.lineSize === 'number')
@@ -2609,13 +2607,11 @@ function addTextDefinition(target, text, opts, isPlaceholder) {
             if (itemOpts.shape === SHAPE_TYPE.LINE) {
                 // ShapeLineProps defaults
                 const newLineOpts = {
-                    type: itemOpts.line.type || 'solid',
-                    color: itemOpts.line.color || DEF_SHAPE_LINE_COLOR,
-                    transparency: itemOpts.line.transparency || 0,
                     width: itemOpts.line.width || 1,
                     dashType: itemOpts.line.dashType || 'solid',
                     beginArrowType: itemOpts.line.beginArrowType || null,
                     endArrowType: itemOpts.line.endArrowType || null,
+                    fill: itemOpts.line.fill || { type: 'solid', color: DEF_SHAPE_LINE_COLOR, transparency: 0 },
                 };
                 if (typeof itemOpts.line === 'object')
                     itemOpts.line = newLineOpts;
@@ -2623,7 +2619,7 @@ function addTextDefinition(target, text, opts, isPlaceholder) {
                 if (typeof itemOpts.line === 'string') {
                     const tmpOpts = newLineOpts;
                     if (typeof itemOpts.line === 'string')
-                        tmpOpts.color = itemOpts.line; // @deprecated [remove in v4.0]
+                        tmpOpts.fill = { type: 'solid', color: itemOpts.line }; // @deprecated [remove in v4.0]
                     // tmpOpts.color = itemOpts.line!.toString() // @deprecated `itemOpts.line`:[string] (was line color)
                     itemOpts.line = tmpOpts;
                 }
@@ -5552,8 +5548,8 @@ function slideObjectToXml(slide) {
                 // shape Type: LINE: line color
                 if (slideItemObj.options.line) {
                     strSlideXml += slideItemObj.options.line.width ? `<a:ln w="${valToPts(slideItemObj.options.line.width)}">` : '<a:ln>';
-                    if (slideItemObj.options.line.color)
-                        strSlideXml += genXmlColorSelection(slideItemObj.options.line);
+                    if (slideItemObj.options.line.fill)
+                        strSlideXml += genXmlColorSelection(slideItemObj.options.line.fill);
                     if (slideItemObj.options.line.dashType)
                         strSlideXml += `<a:prstDash val="${slideItemObj.options.line.dashType}"/>`;
                     if (slideItemObj.options.line.beginArrowType)

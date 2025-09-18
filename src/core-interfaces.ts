@@ -288,7 +288,8 @@ export interface SolidShapeFillProps {
 	 */
 	alpha?: number
 }
-export interface ShapeLineProps extends SolidShapeFillProps {
+export type ShapeFillProps = LinearGradientShapeFillProps | RadialGradientShapeFillProps | SolidShapeFillProps
+export interface ShapeLineProps {
 	/**
 	 * Line width (pt)
 	 * @default 1
@@ -335,6 +336,9 @@ export interface ShapeLineProps extends SolidShapeFillProps {
 	 * @deprecated v3.3.0 - use `width`
 	 */
 	size?: number
+	
+
+	fill?: ShapeFillProps
 }
 // used by: chart, slide, table, text
 export interface TextBaseProps {
@@ -725,7 +729,7 @@ export interface ShapeProps extends PositionProps, ObjectNameProps {
 	 * @example { color:'0088CC', transparency:50 } // hex color, 50% transparent
 	 * @example { color:pptx.SchemeColor.accent1 } // Theme color Accent1
 	 */
-	fill?: LinearGradientShapeFillProps | RadialGradientShapeFillProps | SolidShapeFillProps
+	fill?: ShapeFillProps
 	/**
 	 * Flip shape horizontally?
 	 * @default false
@@ -1109,7 +1113,7 @@ export interface TextPropsOptions extends PositionProps, DataOrPathProps, TextBa
 	 * @example { type:'linearGradient', stops:[...] } // linear gradient
 	 * @example { type:'radiusGradient', stops:[...] } // radial gradient
 	 */
-	fill?: LinearGradientShapeFillProps | RadialGradientShapeFillProps | SolidShapeFillProps
+	fill?: ShapeFillProps
 	/**
 	 * Flip shape horizontally?
 	 * @default false

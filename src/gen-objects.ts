@@ -676,7 +676,7 @@ export function addNotesDefinition(target: PresSlide, notes: string): void {
  */
 export function addShapeDefinition(target: PresSlide, shapeName: SHAPE_NAME, opts: ShapeProps): void {
 	const options = typeof opts === 'object' ? opts : {}
-	options.line = options.line || { type: 'none' }
+	options.line = options.line || { fill: { type: 'none' } }
 	const newObject: ISlideObject = {
 		_type: SLIDE_OBJECT_TYPES.text,
 		shape: shapeName || SHAPE_TYPE.RECTANGLE,
@@ -689,15 +689,13 @@ export function addShapeDefinition(target: PresSlide, shapeName: SHAPE_NAME, opt
 
 	// 1: ShapeLineProps defaults
 	const newLineOpts: ShapeLineProps = {
-		type: options.line.type || 'solid',
-		color: options.line.color || DEF_SHAPE_LINE_COLOR,
-		transparency: options.line.transparency || 0,
 		width: options.line.width || 1,
 		dashType: options.line.dashType || 'solid',
 		beginArrowType: options.line.beginArrowType || null,
 		endArrowType: options.line.endArrowType || null,
+		fill: options.line.fill || { type: 'solid', color: DEF_SHAPE_LINE_COLOR, transparency: 0 },
 	}
-	if (typeof options.line === 'object' && options.line.type !== 'none') options.line = newLineOpts
+	if (typeof options.line === 'object' && options.line.fill?.type !== 'none') options.line = newLineOpts
 
 	// 2: Set options defaults
 	options.x = options.x || (options.x === 0 ? 0 : 1)
@@ -711,7 +709,7 @@ export function addShapeDefinition(target: PresSlide, shapeName: SHAPE_NAME, opt
 	// 3: Handle line (lots of deprecated opts)
 	if (typeof options.line === 'string') {
 		const tmpOpts = newLineOpts
-		tmpOpts.color = String(options.line) // @deprecated `options.line` string (was line color)
+		tmpOpts.fill = { type: 'solid', color: String(options.line) } // @deprecated `options.line` string (was line color)
 		options.line = tmpOpts
 	}
 	if (typeof options.lineSize === 'number') options.line.width = options.lineSize // @deprecated (part of `ShapeLineProps` now)
@@ -1043,20 +1041,18 @@ export function addTextDefinition(target: PresSlide, text: TextProps[], opts: Te
 			if (itemOpts.shape === SHAPE_TYPE.LINE) {
 				// ShapeLineProps defaults
 				const newLineOpts: ShapeLineProps = {
-					type: itemOpts.line.type || 'solid',
-					color: itemOpts.line.color || DEF_SHAPE_LINE_COLOR,
-					transparency: itemOpts.line.transparency || 0,
 					width: itemOpts.line.width || 1,
 					dashType: itemOpts.line.dashType || 'solid',
 					beginArrowType: itemOpts.line.beginArrowType || null,
 					endArrowType: itemOpts.line.endArrowType || null,
+					fill: itemOpts.line.fill || { type: 'solid', color: DEF_SHAPE_LINE_COLOR, transparency: 0 },
 				}
 				if (typeof itemOpts.line === 'object') itemOpts.line = newLineOpts
 
 				// 3: Handle line (lots of deprecated opts)
 				if (typeof itemOpts.line === 'string') {
 					const tmpOpts = newLineOpts
-					if (typeof itemOpts.line === 'string') tmpOpts.color = itemOpts.line // @deprecated [remove in v4.0]
+					if (typeof itemOpts.line === 'string') tmpOpts.fill = { type: 'solid', color: itemOpts.line } // @deprecated [remove in v4.0]
 					// tmpOpts.color = itemOpts.line!.toString() // @deprecated `itemOpts.line`:[string] (was line color)
 					itemOpts.line = tmpOpts
 				}

@@ -899,9 +899,9 @@ declare namespace PptxGenJS {
 		 * Color (hex format)
 		 * @deprecated v3.6.0 - use `ShapeFillProps` instead
 		 */
-		fill?: HexColor | GradientColor | SolidShapeFillProps
+		fill?: HexColor | ShapeFillProps
 
-		color?: HexColor | GradientColor | SolidShapeFillProps
+		color?: HexColor | ShapeFillProps
 
 		/**
 		 * source URL
@@ -1003,33 +1003,7 @@ declare namespace PptxGenJS {
 		rotateWithShape?: boolean
 	}
 	// used by: shape, table, text
-	export interface ShapeFillProps {
-		/**
-		 * Fill color
-		 * - `HexColor` or `ThemeColor`
-		 * @example 'FF0000' // hex color (red)
-		 * @example pptx.SchemeColor.text1 // Theme color (Text1)
-		 */
-		color?: Color
-		/**
-		 * Transparency (percent)
-		 * - MS-PPT > Format Shape > Fill & Line > Fill > Transparency
-		 * - range: 0-100
-		 * @default 0
-		 */
-		transparency?: number
-		/**
-		 * Fill type
-		 * @default 'solid'
-		 */
-		type?: 'none' | 'solid'
-
-		/**
-		 * Transparency (percent)
-		 * @deprecated v3.3.0 - use `transparency`
-		 */
-		alpha?: number
-	}
+	 export type ShapeFillProps = LinearGradientShapeFillProps | RadialGradientShapeFillProps | SolidShapeFillProps
 
 	/**
 	 * Gradient stop properties
@@ -1152,7 +1126,7 @@ declare namespace PptxGenJS {
 		 */
 		alpha?: number
 	}
-	export interface ShapeLineProps extends ShapeFillProps {
+	export interface ShapeLineProps {
 		/**
 		 * Line width (pt)
 		 * @default 1
@@ -1199,6 +1173,11 @@ declare namespace PptxGenJS {
 		 * @deprecated v3.3.0 - use `width`
 		 */
 		size?: number
+		/**
+		 * Line fill
+		 * @default { type: 'solid', color: '000000', transparency: 0 }
+		 */
+		fill?: ShapeFillProps
 	}
 	// used by: chart, slide, table, text
 	export interface TextBaseProps {
@@ -1589,7 +1568,7 @@ declare namespace PptxGenJS {
 		 * @example { color:'0088CC', transparency:50 } // hex color, 50% transparent
 		 * @example { color:pptx.SchemeColor.accent1 } // Theme color Accent1
 		 */
-		fill?: ShapeFillProps | RadialGradientShapeFillProps | LinearGradientShapeFillProps
+		fill?: ShapeFillProps
 		/**
 		 * Flip shape horizontally?
 		 * @default false
