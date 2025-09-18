@@ -1,4 +1,4 @@
-/* PptxGenJS 4.0.2 @ 2025-09-15T02:27:22.949Z */
+/* PptxGenJS 4.0.3 @ 2025-09-18T01:47:00.221Z */
 'use strict';
 
 var JSZip = require('jszip');
@@ -5383,8 +5383,8 @@ function slideObjectToXml(slide) {
                             : '';
                         const cellTextDir = (cellOpts.textDirection && cellOpts.textDirection !== 'horz') ? ` vert="${cellOpts.textDirection}"` : '';
                         let fillColor = ((_d = (_c = cell._optImp) === null || _c === void 0 ? void 0 : _c.fill) === null || _d === void 0 ? void 0 : _d.color)
-                            ? cell._optImp.fill.color
-                            : ((_e = cell._optImp) === null || _e === void 0 ? void 0 : _e.fill) && typeof cell._optImp.fill === 'string'
+                            ? cell._optImp.fill
+                            : ((_e = cell._optImp) === null || _e === void 0 ? void 0 : _e.fill)
                                 ? cell._optImp.fill
                                 : '';
                         fillColor = fillColor || cellOpts.fill ? cellOpts.fill : '';
@@ -6859,7 +6859,7 @@ function makeXmlViewProps() {
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-const VERSION = '4.0.2';
+const VERSION = '4.0.3';
 class PptxGenJS {
     set layout(value) {
         const newLayout = this.LAYOUTS[value];
