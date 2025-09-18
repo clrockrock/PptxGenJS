@@ -1284,7 +1284,7 @@ declare namespace PptxGenJS {
 		 * @example 'FF0000' // hex color (red)
 		 * @example pptx.SchemeColor.text1 // Theme color (Text1)
 		 */
-		color?: Color
+		color?: Color | GradientColor
 		/**
 		 * Font face name
 		 * @example 'Arial' // Arial font
@@ -2496,7 +2496,7 @@ declare namespace PptxGenJS {
 		legendFontSize?: number
 		legendPos?: 'b' | 'l' | 'r' | 't' | 'tr'
 	}
-	export interface IChartPropsTitle extends TextBaseProps {
+	export interface IChartPropsTitle extends Omit<TextBaseProps, 'color'> {
 		title?: string
 		titleAlign?: string
 		titleBold?: boolean
@@ -2505,6 +2505,7 @@ declare namespace PptxGenJS {
 		titleFontSize?: number
 		titlePos?: { x: number, y: number }
 		titleRotate?: number
+		color?: Color
 	}
 	export interface IChartOpts
 		extends IChartPropsAxisCat,

@@ -407,7 +407,7 @@ export interface TextBaseProps {
      * @example 'FF0000' // hex color (red)
      * @example pptx.SchemeColor.text1 // Theme color (Text1)
      */
-    color?: Color;
+    color?: Color | GradientColor;
     /**
      * Font face name
      * @example 'Arial' // Arial font
@@ -1630,7 +1630,7 @@ export interface IChartPropsLegend {
     legendFontSize?: number;
     legendPos?: 'b' | 'l' | 'r' | 't' | 'tr';
 }
-export interface IChartPropsTitle extends TextBaseProps {
+export interface IChartPropsTitle extends Omit<TextBaseProps, 'color'> {
     title?: string;
     titleAlign?: string;
     titleBold?: boolean;
@@ -1642,6 +1642,7 @@ export interface IChartPropsTitle extends TextBaseProps {
         y: number;
     };
     titleRotate?: number;
+    color?: Color;
 }
 export interface IChartOpts extends IChartPropsAxisCat, IChartPropsAxisSer, IChartPropsAxisVal, IChartPropsBase, IChartPropsChartBar, IChartPropsChartDoughnut, IChartPropsChartLine, IChartPropsChartPie, IChartPropsChartRadar, IChartPropsDataLabel, IChartPropsDataTable, IChartPropsLegend, IChartPropsTitle, ObjectNameProps, OptsChartGridLine, PositionProps {
     /**
